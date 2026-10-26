@@ -25,5 +25,9 @@ services:
       GRIMOIRE_DB: /data/grimoire.db
     volumes:
       - ./config:/config:ro
-      # host directory must be writable by the container user (uid 10001)
-      - ${GRIMOIRE_DATA:-/srv/grimoire/data}:/data
+      # host directory must exist (never auto-created) and be owned by uid 10001
+      - type: bind
+        source: ${GRIMOIRE_DATA:-/srv/grimoire/data}
+        target: /data
+        bind:
+          create_host_path: false

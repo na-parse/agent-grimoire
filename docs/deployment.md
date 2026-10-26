@@ -147,6 +147,12 @@ The examples use the address `192.168.1.50`; replace it with your server's.
 | Port | `1880` on the server, `8080` inside the container |
 | Container user | uid `10001` (must own the data directory) |
 
+The data directory must exist before you start: Docker refuses to start the
+container rather than create it. If you mount a separate disk for the data, mount
+it at `/srv/grimoire` and create `data/` on the mounted disk. If the disk is ever
+missing at boot, Grimoire then stays stopped instead of starting with an empty
+database on the wrong disk.
+
 **Prerequisite:** Docker with the compose plugin. On Debian, install Docker CE from
 Docker's own repository (<https://docs.docker.com/engine/install/debian/>), not
 Debian's `docker.io` package. Run the steps below as root (or prefix them with
@@ -392,6 +398,7 @@ and `load` the plist). The board lives in `data/` inside the clone.
 | Works on the server, not from other machines | It's listening only on `127.0.0.1` (use option C or D), or a firewall blocks the port. |
 | An agent never uses Grimoire | The instruction line is missing from that tool's file, or the session started before you added it; start a new session. Mentioning "grimoire" in your request helps. |
 | Examples in the agents' guide show the wrong address | Set `GRIMOIRE_PUBLIC_URL` to the address agents use, then restart. |
+| `docker compose up` fails with "bind source path does not exist" | The data folder is missing: create it (step 2), or mount its disk. |
 | `docker compose ps` never shows `(healthy)` | Check `docker compose logs`. A permissions error on `/data` means the data folder isn't owned by uid `10001`. |
 | A session shows `stale` | It has been quiet past the timeout: it may be busy, or it may have ended. See [Presence](reference.md#presence). |
 | No phone alerts | `GRIMOIRE_NTFY_TOPIC` isn't set or doesn't match the topic you subscribed to. Notices still appear in the web view. |
