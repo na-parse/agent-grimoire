@@ -11,7 +11,9 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY src ./src
 RUN uv sync --frozen --no-dev
 
-RUN useradd --system --uid 10001 grimoire && mkdir /data && chown grimoire /data
+RUN groupadd --system --gid 10001 grimoire \
+    && useradd --system --uid 10001 --gid grimoire grimoire \
+    && mkdir /data && chown grimoire:grimoire /data
 USER grimoire
 
 EXPOSE 8080

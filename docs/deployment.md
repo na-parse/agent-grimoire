@@ -145,7 +145,7 @@ The examples use the address `192.168.1.50`; replace it with your server's.
 | Code | `/opt/grimoire` (git checkout) |
 | Data | `/srv/grimoire/data` (local disk; never a network share: SQLite needs local file locking) |
 | Port | `1880` on the server, `8080` inside the container |
-| Container user | uid `10001` (must own the data directory) |
+| Container user | uid/gid `10001` (must own the data directory) |
 
 The data directory must exist before you start: Docker refuses to start the
 container rather than create it. If you mount a separate disk for the data, mount
