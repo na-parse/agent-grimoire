@@ -1,0 +1,29 @@
+services:
+  grimoire:
+    build: .
+    image: agent-grimoire:latest
+    container_name: grimoire
+    restart: unless-stopped
+    ports:
+      - "${GRIMOIRE_PORT:-1880}:8080"
+    environment:
+      GRIMOIRE_PUBLIC_URL: ${GRIMOIRE_PUBLIC_URL:?set GRIMOIRE_PUBLIC_URL in .env}
+      GRIMOIRE_TITLE: ${GRIMOIRE_TITLE:-Grimoire}
+      GRIMOIRE_NTFY_SERVER: ${GRIMOIRE_NTFY_SERVER:-https://ntfy.sh}
+      GRIMOIRE_NTFY_TOPIC: ${GRIMOIRE_NTFY_TOPIC:-}
+      GRIMOIRE_NTFY_TOKEN: ${GRIMOIRE_NTFY_TOKEN:-}
+      GRIMOIRE_PRESENCE_TIMEOUT: ${GRIMOIRE_PRESENCE_TIMEOUT:-600}
+      GRIMOIRE_PRESENCE_RETENTION_DAYS: ${GRIMOIRE_PRESENCE_RETENTION_DAYS:-7}
+      GRIMOIRE_FILES_MAX_SIZE_MB: ${GRIMOIRE_FILES_MAX_SIZE_MB:-2048}
+      # set on shared filesystems; empty = no quota (the filesystem is the limit)
+      GRIMOIRE_FILES_MAX_TOTAL_GB: ${GRIMOIRE_FILES_MAX_TOTAL_GB:-}
+      GRIMOIRE_FILES_RETENTION_DAYS: ${GRIMOIRE_FILES_RETENTION_DAYS:-7}
+      GRIMOIRE_FILES_LARGE_HOURS: ${GRIMOIRE_FILES_LARGE_HOURS:-24}
+      GRIMOIRE_FILES_HUGE_HOURS: ${GRIMOIRE_FILES_HUGE_HOURS:-2}
+      # used only if the file exists; otherwise the built-in prompt applies
+      GRIMOIRE_OPERATOR_PROMPT: /config/operator_prompt.md
+      GRIMOIRE_DB: /data/grimoire.db
+    volumes:
+      - ./config:/config:ro
+      # host directory must be writable by the container user (uid 10001)
+      - ${GRIMOIRE_DATA:-/srv/grimoire/data}:/data
