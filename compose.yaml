@@ -7,7 +7,8 @@ services:
     ports:
       - "${GRIMOIRE_PORT:-1880}:8080"
     environment:
-      GRIMOIRE_PUBLIC_URL: ${GRIMOIRE_PUBLIC_URL:?set GRIMOIRE_PUBLIC_URL in .env}
+      # built from .env so the port is set once
+      GRIMOIRE_PUBLIC_URL: http://${GRIMOIRE_ADDRESS:?set in .env}:${GRIMOIRE_PORT:-1880}
       GRIMOIRE_TITLE: ${GRIMOIRE_TITLE:-Grimoire}
       GRIMOIRE_NTFY_SERVER: ${GRIMOIRE_NTFY_SERVER:-https://ntfy.sh}
       GRIMOIRE_NTFY_TOPIC: ${GRIMOIRE_NTFY_TOPIC:-}

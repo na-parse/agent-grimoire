@@ -59,7 +59,7 @@ git clone https://github.com/na-parse/agent-grimoire.git /opt/grimoire
 cd /opt/grimoire
 mkdir -p /srv/grimoire/data && chown 10001:10001 /srv/grimoire/data
 cp .env.example .env
-nano .env                # set GRIMOIRE_PUBLIC_URL=http://<server-ip>:1880
+nano .env                # set GRIMOIRE_ADDRESS=<server-ip>
 docker compose up -d --build
 ```
 
